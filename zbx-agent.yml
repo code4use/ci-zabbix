@@ -1,0 +1,45 @@
+version: '2'
+services:
+ zabbix-agent:
+  build: ./agent
+  restart: always
+  ports:
+   - "10050:10050"
+  volumes:
+   - /:/rootfs:ro
+   - /var/run:/var/run:rw
+   - /sys:/sys:ro
+   - /etc/localtime:/etc/localtime:ro
+   - /etc/timezone:/etc/timezone:ro
+   - ${ZBX_PLACE}/zbx_env/etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d:ro
+   - ${ZBX_PLACE}/zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+   - ${ZBX_PLACE}/zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+   - ${ZBX_PLACE}/zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+  env_file:
+   - .env_agent
+  user: root
+  privileged: true
+  pid: "host"
+  networks:
+   zbx_net:
+    aliases:
+     - zabbix-agent
+     - zabbix-agent-passive
+     - zabbix-agent-ubuntu
+  labels:
+   com.zabbix.description: "Zabbix agent"
+   com.zabbix.company: "Zabbix SIA"
+   com.zabbix.component: "zabbix-agentd"
+   com.zabbix.os: "ubuntu"
+
+networks:
+  zbx_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+        gateway: 172.16.238.1
+

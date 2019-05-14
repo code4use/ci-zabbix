@@ -1,0 +1,11 @@
+version: '2'
+services:
+  zabbix-server:
+    environment:
+      - ZBX_JAVAGATEWAY_ENABLE=false
+  zabbix-agent:
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server
+      - ZBX_HOSTNAME=zabbix-agent
+      - ZBX_STARTAGENTS=12
+

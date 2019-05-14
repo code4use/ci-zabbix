@@ -1,0 +1,8 @@
+version: '2'
+services:
+  zabbix-agent:
+    environment:
+      - ZBX_SERVER_HOST=192.168.17.239
+      - ZBX_HOSTNAME=dock7
+      - ZBX_METADATA=Linux docker host
+
